@@ -1,8 +1,12 @@
 package com.backend.TravelGuide.member.security;
 
+import com.backend.TravelGuide.member.error.ErrorResponse;
+import com.backend.TravelGuide.member.error.exception.JwtInvalidException;
 import com.backend.TravelGuide.member.error.exception.NoJwtTokenException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -41,8 +45,34 @@ public class JwtCheckFilter extends OncePerRequestFilter {
             log.info(String.format("[%s] -> %s", jwtTokenProvider.getUsername(token), request.getRequestURI()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else if (StringUtils.hasText(token) && !jwtTokenProvider.validateToken(token)) {
+            JwtInvalidException e = new JwtInvalidException();
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .statusCode(e.getStatusCode())
+                    .messages(Arrays.asList(e.getMessage()))
+                    .build();
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+            response.getWriter().flush();
+            response.getWriter().close();
+
+            throw e;
         } else {
-            throw new NoJwtTokenException();
+            NoJwtTokenException e = new NoJwtTokenException();
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .statusCode(e.getStatusCode())
+                    .messages(Arrays.asList(e.getMessage()))
+                    .build();
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+            response.getWriter().flush();
+            response.getWriter().close();
+
+            throw e;
         }
 
         filterChain.doFilter(request, response);
@@ -60,8 +90,10 @@ public class JwtCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String[] excludePath = {"/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger", "/v2"};
+        String[] excludePath = {"/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger-ui", "/v3", "/api"};
         String path = request.getRequestURI();
+
+        log.info(path);
         return Arrays.stream(excludePath).anyMatch(path::startsWith);
     }
 }

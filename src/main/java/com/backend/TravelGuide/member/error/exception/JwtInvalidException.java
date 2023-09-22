@@ -2,7 +2,7 @@ package com.backend.TravelGuide.member.error.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class NoJwtTokenException extends CustomException{
+public class JwtInvalidException extends CustomException {
     @Override
     public int getStatusCode() {
         return HttpStatus.FORBIDDEN.value();
@@ -10,6 +10,6 @@ public class NoJwtTokenException extends CustomException{
 
     @Override
     public String getMessage() {
-        return "Jwt토큰을 전달받지 못했습니다!";
+        return "JWT 토큰이 유효하지 않습니다!";
     }
 }
