@@ -146,6 +146,6 @@ public class MemberRequestDTO {
     public static class CheckDuplicationDTO {
         @Email(message = "아이디는 이메일 형식입니다")
         private String email;
-        private String nickname;
+        private String nickName;
     }
 }

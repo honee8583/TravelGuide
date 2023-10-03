@@ -24,6 +24,7 @@ public class MemberController {
     // 회원가입
     @PostMapping("/join")
     public ResponseEntity<Void> join(@Valid @RequestBody MemberRequestDTO.MemberJoinDTO joinDTO) {
+        log.info(joinDTO.toString());
         memberService.join(joinDTO);
 
         return ResponseEntity.ok().build();
@@ -33,6 +34,7 @@ public class MemberController {
     // 비밀번호 찾기 질문의 답변 매칭
     @GetMapping("/checkAnswer")
     public ResponseEntity<Boolean> checkAnswer(@Valid @RequestBody MemberRequestDTO.CheckAnswerDTO checkAnswerDTO) {
+        log.info(checkAnswerDTO.toString());
         boolean result = memberService.checkAnswer(checkAnswerDTO);
 
         return ResponseEntity.ok().body(result);    // true(알맞은 답변), false(틀린 답변)
@@ -42,6 +44,7 @@ public class MemberController {
     // 비밀번호 찾기 -> 새 비밀번호 입력
     @PostMapping("/newPassword")
     public ResponseEntity<Void> setNewPassword(@Valid @RequestBody MemberRequestDTO.NewPasswordDTO newPasswordDTO) {
+        log.info(newPasswordDTO.toString());
         memberService.setNewPassword(newPasswordDTO);
 
         return ResponseEntity.ok().build();
@@ -62,6 +65,7 @@ public class MemberController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> update(@Valid @RequestBody MemberRequestDTO.UpdateInfoDTO infoDTO, Principal principal) {
         infoDTO.setEmail(principal.getName());
+        log.info(infoDTO.toString());
         memberService.updateInfo(infoDTO);
 
         return ResponseEntity.ok().build();
@@ -72,6 +76,7 @@ public class MemberController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> resetPassword(@Valid @RequestBody MemberRequestDTO.ResetPwdDTO resetPwdDTO, Principal principal) {
         resetPwdDTO.setEmail(principal.getName());
+        log.info(resetPwdDTO.toString());
         memberService.resetPassword(resetPwdDTO);
 
         return ResponseEntity.ok().build();
@@ -82,15 +87,18 @@ public class MemberController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> withdraw(@Valid @RequestBody MemberRequestDTO.WithdrawDTO withdrawDTO, Principal principal) {
         withdrawDTO.setEmail(principal.getName());
+        log.info(withdrawDTO.toString());
         memberService.withdraw(withdrawDTO);
 
         return ResponseEntity.ok().build();
     }
 
     // 이메일/닉네임 중복검사
-    @GetMapping("/duplication")
+    @PostMapping("/duplication")
     public ResponseEntity<Boolean> isDuplicated(@Valid @RequestBody MemberRequestDTO.CheckDuplicationDTO duplicationDTO) {
-        boolean result = memberService.isDuplicated(duplicationDTO);
+        log.info(duplicationDTO.toString());
+        Boolean result = memberService.isDuplicated(duplicationDTO);
+        log.info(">> 중복검사결과: " + result);
 
         return ResponseEntity.ok().body(result);
     }

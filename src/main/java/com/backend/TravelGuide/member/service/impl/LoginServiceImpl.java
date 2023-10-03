@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
 
         // 처음 로그인하는 경우
         if (optionalMember.isEmpty()) {
+            log.info(">> 처음 로그인하는 카카오 회원입니다!");
             Member member = Member.builder()
                     .email(loginDto.getEmail())
                     .name(loginDto.getNickname())
@@ -54,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
             return member;
         }
 
-        return null;
+        return optionalMember.get();
     }
 
     public String kakaoLogin(MemberRequestDTO.KakaoLoginDTO loginDto) throws Exception {
@@ -103,6 +104,8 @@ public class LoginServiceImpl implements LoginService {
                     new UsernamePasswordAuthenticationToken(username, pwd));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            log.info("로그인 성공!");
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {

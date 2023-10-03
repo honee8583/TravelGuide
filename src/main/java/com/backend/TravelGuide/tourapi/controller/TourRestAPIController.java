@@ -10,30 +10,25 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Tag(name = "TourAPI 컨트롤러")
-@RestController
 @Slf4j
+@RestController
+@RequiredArgsConstructor
 public class TourRestAPIController {
-    @Qualifier("tourAPIServiceImpl")
-    public final TourAPIService tourAPIService;
+    private final TourAPIService tourAPIService;
 
     @Value("${api.key}")
     String apiKey;
-
-    public TourRestAPIController(TourAPIService tourAPIService) {
-        this.tourAPIService = tourAPIService;
-    }
 
     @Operation(summary = "키워드 검색", description = "키워드와 페이지 번호를 전달하면 여행지 목록을 JSON으로 반환합니다.")
     @ApiResponses(
@@ -50,14 +45,14 @@ public class TourRestAPIController {
     }
     )
     @GetMapping("/api/tourapi/keywordSearch")
-    public List<?> tourListApiByKeyword(
+    public ResponseEntity<List<TourAPIDTO>> tourListApiByKeyword(
             @RequestParam String keyword,
             @RequestParam String pageNo
     ) {
 
-        List<TourAPIDTO> tourAPIDTOS = tourAPIService.keywordSearchApi(apiKey, keyword, pageNo);
+        List<TourAPIDTO> tourApiDTOs = tourAPIService.keywordSearchApi(apiKey, keyword, pageNo);
 
-        return tourAPIDTOS;
+        return ResponseEntity.ok(tourApiDTOs);
     }
 
     @Operation(summary = "지역 기반 검색", description = "선택한 지역의 여행지 목록을 가져옵니다.")
@@ -75,27 +70,27 @@ public class TourRestAPIController {
             }
     )
     @GetMapping("/api/tourapi/areaBasedSearch")
-    public List<TourAPIDTO> tourListApiByArea(
+    public ResponseEntity<List<TourAPIDTO>> tourListApiByArea(
             @RequestParam String areaCode,
             @RequestParam String pageNo
     ) {
 
-        List<TourAPIDTO> tourAPIDTOS = tourAPIService.areaBasedSearchApi(apiKey, areaCode, pageNo);
+        List<TourAPIDTO> tourAPIDTOs = tourAPIService.areaBasedSearchApi(apiKey, areaCode, pageNo);
 
-        return tourAPIDTOS;
+        return ResponseEntity.ok(tourAPIDTOs);
     }
 
-    @ExceptionHandler({MissingServletRequestParameterException.class, HttpServerErrorException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public String handleMissingServletRequestParameterException() {
-        log.info("예외 발생!\nMissingServletRequestParameterException");
-        return "Bad Request";
-    }
+//    @ExceptionHandler({MissingServletRequestParameterException.class, HttpServerErrorException.class})
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public String handleMissingServletRequestParameterException() {
+//        log.info("예외 발생!\nMissingServletRequestParameterException");
+//        return "Bad Request";
+//    }
 
-    @ExceptionHandler(JSONException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleJsonException() {
-        log.info("예외 발생!\nJSONException");
-        return "Server Error";
-    }
+//    @ExceptionHandler(JSONException.class)
+//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+//    public String handleJsonException() {
+//        log.info("예외 발생!\nJSONException");
+//        return "Server Error";
+//    }
 }

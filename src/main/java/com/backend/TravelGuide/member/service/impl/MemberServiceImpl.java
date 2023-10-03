@@ -4,9 +4,8 @@ import com.backend.TravelGuide.member.domain.Member;
 import com.backend.TravelGuide.member.domain.MemberRequestDTO;
 import com.backend.TravelGuide.member.domain.MemberResponseDTO;
 import com.backend.TravelGuide.member.domain.Role;
-import com.backend.TravelGuide.member.error.exception.UserAlreadyExistsException;
 import com.backend.TravelGuide.member.error.exception.PasswordNotMatchException;
-import com.backend.TravelGuide.member.error.exception.UserNotMatchException;
+import com.backend.TravelGuide.member.error.exception.UserAlreadyExistsException;
 import com.backend.TravelGuide.member.repository.MemberRepository;
 import com.backend.TravelGuide.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -144,8 +141,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public boolean isDuplicated(MemberRequestDTO.CheckDuplicationDTO duplicationDTO) {
         // 존재하지 않는 닉네임일 경우 false 반환
-        if (duplicationDTO.getNickname() != null && !duplicationDTO.getNickname().equals("")) {
-            return !memberRepository.existsByNickname(duplicationDTO.getNickname());
+        if (duplicationDTO.getNickName() != null && !duplicationDTO.getNickName().equals("")) {
+            return !memberRepository.existsByNickname(duplicationDTO.getNickName());
         }
 
         // 존재하지 않는 이메일일 경우 false 반환

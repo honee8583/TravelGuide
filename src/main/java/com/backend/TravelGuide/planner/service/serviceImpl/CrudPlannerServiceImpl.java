@@ -9,7 +9,7 @@ import com.backend.TravelGuide.planner.DTO.ScheduleDTO;
 import com.backend.TravelGuide.planner.domain.Planner;
 import com.backend.TravelGuide.planner.domain.QPlanner;
 import com.backend.TravelGuide.planner.domain.Schedule;
-import com.backend.TravelGuide.planner.error.exception.NoSuchPlannerException;
+import com.backend.TravelGuide.planner.error.exception.PlannerNotExistsException;
 import com.backend.TravelGuide.planner.mapper.PlannerMapper;
 import com.backend.TravelGuide.planner.mapper.ScheduleMapper;
 import com.backend.TravelGuide.planner.repository.PlannerRepository;
@@ -90,22 +90,25 @@ public class CrudPlannerServiceImpl implements CrudPlannerService {
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
 
         Planner planner = plannerRepository.findByPlannerId(plannerId)
-                .orElseThrow(NoSuchPlannerException::new);
+                .orElseThrow(PlannerNotExistsException::new);
+
+        if (!member.getEmail().equals(planner.getEmail())) {
+            throw new UserNotMatchException();
+        }
 
         scheduleRepository.deleteByPlannerId(planner.getPlannerId());
-        plannerRepository.deleteByPlannerId(planner.getPlannerId());
+        plannerRepository.delete(planner);
     }
 
     // 플래너 수정
     @Override
     @Transactional
     public void updatePlannerFull(String email, PlannerDTO plannerDTO) {
-
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User.."));
 
         Planner planner = plannerRepository.findByPlannerId(plannerDTO.getPlannerId())
-                .orElseThrow(NoSuchPlannerException::new);
+                .orElseThrow(PlannerNotExistsException::new);
 
         if (!planner.getEmail().equals(email)) {
             throw new UserNotMatchException();
@@ -118,8 +121,6 @@ public class CrudPlannerServiceImpl implements CrudPlannerService {
                     scheduleDTO.setPlannerId(planner.getPlannerId());
                     scheduleRepository.save(scheduleMapper.scheduleDTOToEntity(scheduleDTO));
         });
-
-        log.info("<< update id : " + planner.getPlannerId() + " planner >>");
     }
 
     // 플래너 검색
