@@ -12,11 +12,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -49,6 +51,7 @@ public class TourRestAPIController {
             @RequestParam String keyword,
             @RequestParam String pageNo
     ) {
+        log.info("keyword: " + keyword +", pageNo: " + pageNo);
 
         List<TourAPIDTO> tourApiDTOs = tourAPIService.keywordSearchApi(apiKey, keyword, pageNo);
 
@@ -74,23 +77,24 @@ public class TourRestAPIController {
             @RequestParam String areaCode,
             @RequestParam String pageNo
     ) {
+        log.info("areaCode: " + areaCode +", pageNo: " + pageNo);
 
         List<TourAPIDTO> tourAPIDTOs = tourAPIService.areaBasedSearchApi(apiKey, areaCode, pageNo);
 
         return ResponseEntity.ok(tourAPIDTOs);
     }
 
-//    @ExceptionHandler({MissingServletRequestParameterException.class, HttpServerErrorException.class})
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//    public String handleMissingServletRequestParameterException() {
-//        log.info("예외 발생!\nMissingServletRequestParameterException");
-//        return "Bad Request";
-//    }
+    @ExceptionHandler({MissingServletRequestParameterException.class, HttpServerErrorException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public String handleMissingServletRequestParameterException() {
+        log.info("예외 발생!\nMissingServletRequestParameterException");
+        return "Bad Request";
+    }
 
-//    @ExceptionHandler(JSONException.class)
-//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-//    public String handleJsonException() {
-//        log.info("예외 발생!\nJSONException");
-//        return "Server Error";
-//    }
+    @ExceptionHandler(JSONException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleJsonException() {
+        log.info("예외 발생!\nJSONException");
+        return "Server Error";
+    }
 }
