@@ -6,16 +6,12 @@ import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Component
@@ -23,10 +19,10 @@ import java.util.List;
 public class TourApiExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    protected ResponseEntity<ErrorResponse> missingServletRequestParameterExceptionHandler(MethodArgumentNotValidException e) {
+    protected ResponseEntity<ErrorResponse> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException e) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .messages(Arrays.asList(e.getMessage()))
+                .messages(Arrays.asList("파라미터가 들어오지 않았습니다!"))
                 .build();
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

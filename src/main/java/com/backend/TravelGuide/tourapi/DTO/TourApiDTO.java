@@ -1,15 +1,14 @@
 package com.backend.TravelGuide.tourapi.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 //한국 관광정보 API에서 Response한 XML 결과를 담는 DTO
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TourAPIDTO {
-
+public class TourApiDTO {
     private String addr1;
     private String addr2;
     private String areacode;
@@ -19,5 +18,4 @@ public class TourAPIDTO {
     private String mapy;
     private String title;
     private String image;
-
 }

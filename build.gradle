@@ -53,6 +53,7 @@ dependencies {
 			'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	)
 	implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.15.2'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	// queryDsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
