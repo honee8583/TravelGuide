@@ -5,10 +5,6 @@ import com.backend.TravelGuide.tourapi.service.serviceImpl.TourApiService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,19 +23,9 @@ public class TourRestAPIController {
     private final TourApiService tourAPIService;
 
     @Operation(summary = "키워드 검색", description = "키워드와 페이지 번호를 전달하면 여행지 목록을 JSON으로 반환합니다.")
-    @ApiResponses(
-            {
-                    @ApiResponse(responseCode = "200", description = "OK!", content = @Content(schema = @Schema(implementation = TourApiDTO.class))),
-                    @ApiResponse(responseCode = "400", description = "Bad Request"),
-                    @ApiResponse(responseCode = "500", description = "Server Error")
-            }
-    )
-    @Parameters(
-            {
+    @Parameters({
             @Parameter(name = "keyword", description = "키워드", example = "타워"),
-            @Parameter(name = "pageNo", description = "페이지 번호", example = "1")
-    }
-    )
+            @Parameter(name = "pageNo", description = "페이지 번호", example = "1")})
     @GetMapping("/api/tourapi/keywordSearch")
     public ResponseEntity<List<TourApiDTO>> tourListApiByKeyword(
             @RequestParam String keyword,

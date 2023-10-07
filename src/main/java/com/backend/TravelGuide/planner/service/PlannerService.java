@@ -5,7 +5,7 @@ import com.backend.TravelGuide.planner.DTO.PlannerRequestDTO;
 
 import java.util.List;
 
-public interface CrudPlannerService {
+public interface PlannerService {
 
     void insertPlannerFull(PlannerDTO plannerDTO);
 

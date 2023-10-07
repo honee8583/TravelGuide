@@ -53,9 +53,11 @@ public class MemberRequestDTO {
         @NotBlank(message = "닉네임은 필수 입력란입니다")
         private String nickname;
 
-        @NotEmpty(message = "답을 입력해주셔야 합니다")
-        @Size(min = 3, message = "3개의 답을 모두 작성해주셔야 합니다")
-        private List<String> answers = new ArrayList<>();
+//        @NotEmpty(message = "답을 입력해주셔야 합니다")
+//        @Size(min = 3, message = "3개의 답을 모두 작성해주셔야 합니다")
+//        private List<String> answers = new ArrayList<>();
+        private Long questionId;
+        private String answer;
     }
 
     @Getter
@@ -146,6 +148,6 @@ public class MemberRequestDTO {
     public static class CheckDuplicationDTO {
         @Email(message = "아이디는 이메일 형식입니다")
         private String email;
-        private String nickName;
+        private String nickname;
     }
 }

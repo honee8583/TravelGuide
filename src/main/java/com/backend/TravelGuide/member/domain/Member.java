@@ -28,8 +28,10 @@ public class Member extends BaseEntity {
     private boolean fromSocial;
 
     // 비밀번호 초기화 질문에 대한 대답
-    @ElementCollection(fetch = FetchType.LAZY)
-    Map<Integer, String> answers = new HashMap<>();
+//    @ElementCollection(fetch = FetchType.LAZY)
+//    Map<Integer, String> answers = new HashMap<>();
+    private Long questionId;
+    private String answer;
 
     public void updateInfo(MemberRequestDTO.UpdateInfoDTO updateInfoDTO) {
         this.nickname = updateInfoDTO.getNickname();

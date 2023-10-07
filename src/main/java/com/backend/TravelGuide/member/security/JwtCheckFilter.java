@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 @Slf4j
@@ -38,6 +39,7 @@ public class JwtCheckFilter extends OncePerRequestFilter {
         log.info(">>> JwtCheckFilter");
 
         String token = resolveTokenFromRequest(request);
+//        PrintWriter writer = response.getWriter();
 
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
@@ -47,31 +49,11 @@ public class JwtCheckFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (StringUtils.hasText(token) && !jwtTokenProvider.validateToken(token)) {
             JwtInvalidException e = new JwtInvalidException();
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .statusCode(e.getStatusCode())
-                    .messages(Arrays.asList(e.getMessage()))
-                    .build();
-
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
-            response.getWriter().flush();
-            response.getWriter().close();
-
+            request.getRequestDispatcher("/error/invalidJwt").forward(request, response);
             throw e;
         } else {
             NoJwtTokenException e = new NoJwtTokenException();
-            ErrorResponse errorResponse = ErrorResponse.builder()
-                    .statusCode(e.getStatusCode())
-                    .messages(Arrays.asList(e.getMessage()))
-                    .build();
-
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
-            response.getWriter().flush();
-            response.getWriter().close();
-
+            request.getRequestDispatcher("/error/noJwt").forward(request, response);
             throw e;
         }
 
@@ -90,7 +72,7 @@ public class JwtCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String[] excludePath = {"/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger-ui", "/v3", "/api"};
+        String[] excludePath = {"/uploadEx", "/file", "/favicon.ico","/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger-ui", "/v3", "/api"};
         String path = request.getRequestURI();
 
         log.info(path);

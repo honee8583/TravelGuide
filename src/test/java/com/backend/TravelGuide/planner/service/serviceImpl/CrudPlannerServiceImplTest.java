@@ -13,16 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class CrudPlannerServiceImplTest {
@@ -125,7 +121,7 @@ class CrudPlannerServiceImplTest {
     ScheduleMapper scheduleMapper;
 
     @Autowired
-    CrudPlannerServiceImpl crudPlannerService;
+    PlannerServiceImpl crudPlannerService;
 
     @Test
     @DisplayName("insert planner test")

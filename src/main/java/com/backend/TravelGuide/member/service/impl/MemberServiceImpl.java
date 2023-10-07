@@ -15,9 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,12 +29,6 @@ public class MemberServiceImpl implements MemberService {
             throw new UserAlreadyExistsException();
         }
 
-        int idx = 1;
-        HashMap<Integer, String> map = new HashMap<>();
-        for (String answer : joinDTO.getAnswers()) {
-            map.put(idx++, answer);
-        }
-
         Member member = Member.builder()
                 .email(joinDTO.getEmail())
                 .password(passwordEncoder.encode(joinDTO.getPassword()))
@@ -45,7 +36,8 @@ public class MemberServiceImpl implements MemberService {
                 .nickname(joinDTO.getNickname())
                 .role(Role.USER)
                 .fromSocial(false)
-                .answers(map)
+                .questionId(joinDTO.getQuestionId())
+                .answer(joinDTO.getAnswer())
                 .build();
 
         Member savedMember = memberRepository.save(member);
@@ -102,10 +94,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByEmailAndName(checkAnswerDTO.getEmail(), checkAnswerDTO.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다!"));
 
-        Map<Integer, String> answers = member.getAnswers();
-        String answer = answers.get(checkAnswerDTO.getQuestionId());
-
-        return answer.equals(checkAnswerDTO.getAnswer());
+        return member.getAnswer().equals(checkAnswerDTO.getAnswer());
     }
 
     @Override
@@ -141,8 +130,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public boolean isDuplicated(MemberRequestDTO.CheckDuplicationDTO duplicationDTO) {
         // 존재하지 않는 닉네임일 경우 false 반환
-        if (duplicationDTO.getNickName() != null && !duplicationDTO.getNickName().equals("")) {
-            return !memberRepository.existsByNickname(duplicationDTO.getNickName());
+        if (duplicationDTO.getNickname() != null && !duplicationDTO.getNickname().equals("")) {
+            return !memberRepository.existsByNickname(duplicationDTO.getNickname());
         }
 
         // 존재하지 않는 이메일일 경우 false 반환

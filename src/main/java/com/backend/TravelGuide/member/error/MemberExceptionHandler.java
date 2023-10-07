@@ -55,8 +55,6 @@ public class MemberExceptionHandler {
                 .messages(Arrays.asList(e.getMessage()))
                 .build();
 
-        log.info(errorResponse.toString());
-
         return new ResponseEntity<>(errorResponse, HttpStatus.resolve(e.getStatusCode()));
     }
 }

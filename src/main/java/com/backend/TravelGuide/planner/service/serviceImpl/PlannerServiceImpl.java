@@ -14,7 +14,7 @@ import com.backend.TravelGuide.planner.mapper.PlannerMapper;
 import com.backend.TravelGuide.planner.mapper.ScheduleMapper;
 import com.backend.TravelGuide.planner.repository.PlannerRepository;
 import com.backend.TravelGuide.planner.repository.ScheduleRepository;
-import com.backend.TravelGuide.planner.service.CrudPlannerService;
+import com.backend.TravelGuide.planner.service.PlannerService;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CrudPlannerServiceImpl implements CrudPlannerService {
+public class PlannerServiceImpl implements PlannerService {
     private final PlannerMapper plannerMapper;
     private final ScheduleMapper scheduleMapper;
     private final PlannerRepository plannerRepository;

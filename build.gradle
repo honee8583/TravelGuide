@@ -58,6 +58,10 @@ dependencies {
 	// queryDsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// review
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.7.5'
+	implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
 tasks.named('test') {

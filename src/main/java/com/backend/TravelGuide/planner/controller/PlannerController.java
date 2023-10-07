@@ -3,7 +3,8 @@ package com.backend.TravelGuide.planner.controller;
 import com.backend.TravelGuide.planner.DTO.PlannerDTO;
 import com.backend.TravelGuide.planner.DTO.PlannerRequestDTO;
 import com.backend.TravelGuide.planner.mapper.PlannerMapper;
-import com.backend.TravelGuide.planner.service.CrudPlannerService;
+import com.backend.TravelGuide.planner.service.PlannerService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlannerController {
     private final PlannerMapper plannerMapper;
-    private final CrudPlannerService crudPlannerService;
+    private final PlannerService crudPlannerService;
 
+    @Operation(summary = "플래너 작성")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> addPlanner(
             @RequestBody PlannerRequestDTO.PlannerWriteRequestDTO plannerRequestDTO,
@@ -37,6 +39,7 @@ public class PlannerController {
         return ResponseEntity.ok(true);
     }
 
+    @Operation(summary = "내 플래너 목록 조회")
     @GetMapping(value = "/view/my_planner")
     public ResponseEntity<List<PlannerDTO>> viewMyPlanner(
             Authentication authentication,
@@ -47,6 +50,7 @@ public class PlannerController {
         return ResponseEntity.ok(plannerDTOList);
     }
 
+    @Operation(summary = "모든 플래너 목록 조회")
     @GetMapping(value = "/view/all_planner")
     public ResponseEntity<List<PlannerDTO>> viewAllPlanner(
             Authentication authentication,
@@ -58,6 +62,7 @@ public class PlannerController {
         return ResponseEntity.ok(plannerDTOList);
     }
 
+    @Operation(summary = "플래너 수정")
     @PutMapping("/edit")
     public ResponseEntity<Boolean> editPlanner(
             @RequestBody PlannerRequestDTO.PlannerUpdateRequestDTO plannerRequestDTO,
@@ -73,6 +78,7 @@ public class PlannerController {
         return ResponseEntity.ok(true);
     }
 
+    @Operation(summary = "플래너 삭제")
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deletePlanner(
             Authentication authentication,
