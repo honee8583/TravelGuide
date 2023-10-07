@@ -24,11 +24,11 @@ public class MemberController {
 
     @Operation(summary = "회원가입")
     @PostMapping("/join")
-    public ResponseEntity<Void> join(@Valid @RequestBody MemberRequestDTO.MemberJoinDTO joinDTO) {
+    public ResponseEntity<Boolean> join(@Valid @RequestBody MemberRequestDTO.MemberJoinDTO joinDTO) {
         log.info(joinDTO.toString());
         memberService.join(joinDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "비밀번호 찾기 - 답변 일치 여부")
@@ -42,11 +42,11 @@ public class MemberController {
 
     @Operation(summary = "비밀번호 찾기 - 새 비밀번호 입력")
     @PostMapping("/newPassword")
-    public ResponseEntity<Void> setNewPassword(@Valid @RequestBody MemberRequestDTO.NewPasswordDTO newPasswordDTO) {
+    public ResponseEntity<Boolean> setNewPassword(@Valid @RequestBody MemberRequestDTO.NewPasswordDTO newPasswordDTO) {
         log.info(newPasswordDTO.toString());
         memberService.setNewPassword(newPasswordDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "회원 정보 조회")
@@ -62,34 +62,34 @@ public class MemberController {
     @Operation(summary = "회원 정보 수정")
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> update(@Valid @RequestBody MemberRequestDTO.UpdateInfoDTO infoDTO, Principal principal) {
+    public ResponseEntity<Boolean> update(@Valid @RequestBody MemberRequestDTO.UpdateInfoDTO infoDTO, Principal principal) {
         infoDTO.setEmail(principal.getName());
         log.info(infoDTO.toString());
         memberService.updateInfo(infoDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "비밀번호 초기화")
     @PutMapping("/password_reset")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> resetPassword(@Valid @RequestBody MemberRequestDTO.ResetPwdDTO resetPwdDTO, Principal principal) {
+    public ResponseEntity<Boolean> resetPassword(@Valid @RequestBody MemberRequestDTO.ResetPwdDTO resetPwdDTO, Principal principal) {
         resetPwdDTO.setEmail(principal.getName());
         log.info(resetPwdDTO.toString());
         memberService.resetPassword(resetPwdDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "회원탈퇴")
     @DeleteMapping("/withdraw")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Void> withdraw(@Valid @RequestBody MemberRequestDTO.WithdrawDTO withdrawDTO, Principal principal) {
+    public ResponseEntity<Boolean> withdraw(@Valid @RequestBody MemberRequestDTO.WithdrawDTO withdrawDTO, Principal principal) {
         withdrawDTO.setEmail(principal.getName());
         log.info(withdrawDTO.toString());
         memberService.withdraw(withdrawDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "이메일/닉네임 중복 검사")
