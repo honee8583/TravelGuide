@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <input name="uploadFiles" type="file" multiple>
+  <button class="uploadBtn">Upload</button>
+
+  <div class="uploadResult"></div>
+
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+  <script>
+    $('.uploadBtn').click(function() {
+      var formData = new FormData();
+      var inputFile = $("input[type='file']");
+      var files = inputFile[0].files;
+
+      for (var i = 0; i < files.length; i++) {
+        console.log(files[i]);
+        formData.append("uploadFiles", files[i]);
+      }
+
+      // 업로드
+        $.ajax({
+           url: '/file/upload',
+           processData: false,
+           contentType: false,  // 반드시 false로 지정(multipart/form-data타입을 사용하기 위함)
+           data: formData,
+           type: 'POST',
+           dataType: 'json',
+           success: function(result) {
+               console.log(result);
+               showUploadedImages(result);
+           },
+            error: function(jqXHR, textStatus, errorThrown) {
+               console.log(textStatus);
+            }
+        });
+
+    });
+
+    $(".uploadResult").on("click", ".removeBtn", function(e) {
+       var target = $(this);
+       var fileName = target.data("name");  // imageUrl
+       var targetDiv = $(this).closest("div");  // img, button을 담은 div
+
+       console.log(fileName);
+
+       $.post('/file/remove', {fileName: fileName}, function(result) {
+          console.log(result);
+          if (result) {
+              targetDiv.remove();
+          }
+       });
+    });
+
+    function showUploadedImages(arr) {
+        console.log(arr);
+        var divArea = $(".uploadResult");
+
+        var str = "";
+        for (var i = 0;i < arr.length; i++) {
+            str += "<div>";
+            str += "<img src='/file/display?fileName=" + arr[i].thumbnailUrl + "'>";
+            str += "<button class='removeBtn' data-name='" + arr[i].imageUrl + "'>REMOVE</button>";
+            str += "</div>";
+        }
+        divArea.append(str);
+    }
+
+  </script>
+</body>
+</html>
