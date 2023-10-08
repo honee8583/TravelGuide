@@ -67,14 +67,13 @@ public class MemberRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateInfoDTO {
-        @Email(message = "아이디는 이메일 형식입니다")
         private String email;
-
-        @NotBlank(message = "이름은 필수 입력란입니다")
-        private String name;
-
-        @NotBlank(message = "이름은 필수 입력란입니다")
         private String nickname;
+
+//        @NotBlank(message = "이름은 필수 입력란입니다")
+//        private String name;
+
+//        @NotBlank(message = "이름은 필수 입력란입니다")
     }
 
     @Getter

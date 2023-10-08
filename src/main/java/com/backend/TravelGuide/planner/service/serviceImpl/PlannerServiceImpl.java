@@ -5,6 +5,7 @@ import com.backend.TravelGuide.member.error.exception.UserNotMatchException;
 import com.backend.TravelGuide.member.repository.MemberRepository;
 import com.backend.TravelGuide.planner.DTO.PlannerDTO;
 import com.backend.TravelGuide.planner.DTO.PlannerRequestDTO;
+import com.backend.TravelGuide.planner.DTO.PlannerResponseDTO;
 import com.backend.TravelGuide.planner.DTO.ScheduleDTO;
 import com.backend.TravelGuide.planner.domain.Planner;
 import com.backend.TravelGuide.planner.domain.QPlanner;
@@ -42,9 +43,8 @@ public class PlannerServiceImpl implements PlannerService {
     @Override
     @Transactional
     public void insertPlannerFull(PlannerDTO plannerDTO) {
-        log.info("<< add " + plannerDTO.getTitle() + " to table >>");
-
-        Planner planner = plannerMapper.plannerDTOToEntity(plannerDTO);
+        plannerDTO.setThumbnailUrl(plannerDTO.getSchedule().get(0).getThumbnailLocation());
+        Planner planner = Planner.dtoToEntity(plannerDTO);
         Planner plannerResult = plannerRepository.save(planner);
 
         plannerDTO.getSchedule().stream().forEach(s -> {
@@ -57,29 +57,28 @@ public class PlannerServiceImpl implements PlannerService {
     // 내 플래너들 목록
     @Transactional
     @Override
-    public List<PlannerDTO> findMyPlannerByEmail(String email, int page, int size) {
+    public PlannerResponseDTO.PlannerPageDTO findMyPlannerByEmail(String email, int page, int size) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
 
         Pageable pageable = PageRequest.of(page - 1, size);
-
-        log.info(pageable.getPageNumber() + ", " + pageable.getPageSize());
-
         Page<Planner> plannerList = plannerRepository.findByEmail(email, pageable);
 
-        return getPlannerDTO(plannerList);
+        return new PlannerResponseDTO.PlannerPageDTO(plannerList);
     }
 
     // 전체 플래너 리스트
     @Transactional
     @Override
-    public List<PlannerDTO> findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
+    public PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
 
         Page<Planner> plannerList = searchPlanner(searchDTO);
 
-        return getPlannerDTO(plannerList);
+        PlannerResponseDTO.PlannerPageDTO pageDTO = new PlannerResponseDTO.PlannerPageDTO(plannerList);
+
+        return pageDTO;
     }
 
     // 플래너 삭제

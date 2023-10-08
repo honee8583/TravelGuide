@@ -95,10 +95,10 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public List<ReviewDTO> getList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO) {
+    public ReviewResponseDTO.ReviewPageDTO getList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO) {
         Page<Review> pages = searchReview(reviewSearchDTO);
 
-        return pages.stream().map((review) -> ReviewDTO.entitiesToDTO(review, null, null)).toList();
+        return new ReviewResponseDTO.ReviewPageDTO(pages);
     }
 
     @Override

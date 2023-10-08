@@ -43,15 +43,23 @@ public class Planner extends BaseEntity {
     @Version
     private Long version;
 
-    /*@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "planner_id")
-    private List<Schedule> scheduleList = new ArrayList<>();*/
+    private String thumbnailUrl;
+
+    public static Planner dtoToEntity(PlannerDTO plannerDTO) {
+        return Planner.builder()
+                .email(plannerDTO.getEmail())
+                .title(plannerDTO.getTitle())
+                .firstDate(plannerDTO.getFirstDate())
+                .lastDate(plannerDTO.getLastDate())
+                .comment(plannerDTO.getComment())
+                .thumbnailUrl(plannerDTO.getThumbnailUrl())
+                .build();
+    }
+
     public void updateInfo(PlannerDTO plannerDTO) {
         this.title = plannerDTO.getTitle();
         this.firstDate = plannerDTO.getFirstDate();
         this.lastDate = plannerDTO.getLastDate();
         this.comment = plannerDTO.getComment();
     }
-
-
 }

@@ -1,6 +1,8 @@
 package com.backend.TravelGuide.review.controller;
 
 import com.backend.TravelGuide.review.domain.ReviewImageDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,12 +30,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Slf4j
+@Tag(name = "이미지 컨트롤러")
 @RequestMapping("/file")
 @RestController
 public class UploadController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    @Operation(summary = "이미지 업로드")
     @PostMapping("/upload")
     public ResponseEntity<List<ReviewImageDTO>> uploadFile(MultipartFile[] uploadFiles) {
         List<ReviewImageDTO> reviewImageDTOList = new ArrayList<>();
@@ -77,6 +81,7 @@ public class UploadController {
         return ResponseEntity.ok(reviewImageDTOList);
     }
 
+    @Operation(summary = "이미지 조회")
     @GetMapping("/display")
     public ResponseEntity<byte[]> getFile(String fileName) {
         ResponseEntity<byte[]> result = null;
@@ -98,6 +103,7 @@ public class UploadController {
         return result;
     }
 
+    @Operation(summary = "이미지 삭제")
     @PostMapping("/remove")
     public ResponseEntity<Boolean> removeFile(String fileName) {
         String srcFileName = null;

@@ -20,6 +20,7 @@ public class ReviewRequestDTO {
         private String content;
         private Boolean isVisible;
         private String location;
+        private String thumbnailUrl;
 
         @Builder.Default
         private List<ReviewImageDTO> reviewImageDTOList = new ArrayList<>();

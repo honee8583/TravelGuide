@@ -32,7 +32,7 @@ public class MemberController {
     }
 
     @Operation(summary = "비밀번호 찾기 - 답변 일치 여부")
-    @GetMapping("/checkAnswer")
+    @PostMapping("/checkAnswer")
     public ResponseEntity<Boolean> checkAnswer(@Valid @RequestBody MemberRequestDTO.CheckAnswerDTO checkAnswerDTO) {
         log.info(checkAnswerDTO.toString());
         boolean result = memberService.checkAnswer(checkAnswerDTO);
@@ -62,7 +62,7 @@ public class MemberController {
     @Operation(summary = "회원 정보 수정")
     @PutMapping("/update")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Boolean> update(@Valid @RequestBody MemberRequestDTO.UpdateInfoDTO infoDTO, Principal principal) {
+    public ResponseEntity<Boolean> update(@RequestBody MemberRequestDTO.UpdateInfoDTO infoDTO, Principal principal) {
         infoDTO.setEmail(principal.getName());
         log.info(infoDTO.toString());
         memberService.updateInfo(infoDTO);
@@ -82,7 +82,7 @@ public class MemberController {
     }
 
     @Operation(summary = "회원탈퇴")
-    @DeleteMapping("/withdraw")
+    @PostMapping("/withdraw")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Boolean> withdraw(@Valid @RequestBody MemberRequestDTO.WithdrawDTO withdrawDTO, Principal principal) {
         withdrawDTO.setEmail(principal.getName());

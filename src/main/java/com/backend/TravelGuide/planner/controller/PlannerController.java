@@ -2,6 +2,7 @@ package com.backend.TravelGuide.planner.controller;
 
 import com.backend.TravelGuide.planner.DTO.PlannerDTO;
 import com.backend.TravelGuide.planner.DTO.PlannerRequestDTO;
+import com.backend.TravelGuide.planner.DTO.PlannerResponseDTO;
 import com.backend.TravelGuide.planner.mapper.PlannerMapper;
 import com.backend.TravelGuide.planner.service.PlannerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlannerController {
     private final PlannerMapper plannerMapper;
-    private final PlannerService crudPlannerService;
+    private final PlannerService plannerService;
 
     @Operation(summary = "플래너 작성")
     @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,32 +35,29 @@ public class PlannerController {
         plannerDTO.setEmail(email);
         log.info(plannerDTO.toString());
 
-        crudPlannerService.insertPlannerFull(plannerDTO);
+        plannerService.insertPlannerFull(plannerDTO);
 
         return ResponseEntity.ok(true);
     }
 
     @Operation(summary = "내 플래너 목록 조회")
     @GetMapping(value = "/view/my_planner")
-    public ResponseEntity<List<PlannerDTO>> viewMyPlanner(
-            Authentication authentication,
-            @RequestParam int page,
-            @RequestParam int size) {
-        List<PlannerDTO> plannerDTOList = crudPlannerService.findMyPlannerByEmail(authentication.getName(), page, size);
+    public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewMyPlanner(
+            Authentication authentication, @RequestParam int page, @RequestParam int size) {
+        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findMyPlannerByEmail(authentication.getName(), page, size);
 
-        return ResponseEntity.ok(plannerDTOList);
+        return ResponseEntity.ok(pageDTO);
     }
 
     @Operation(summary = "모든 플래너 목록 조회")
     @GetMapping(value = "/view/all_planner")
-    public ResponseEntity<List<PlannerDTO>> viewAllPlanner(
-            Authentication authentication,
-            PlannerRequestDTO.PlannerSearchDTO searchDTO) {
+    public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewAllPlanner(
+            Authentication authentication, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         log.info(searchDTO.toString());
 
-        List<PlannerDTO> plannerDTOList = crudPlannerService.findAllPlanner(authentication.getName(), searchDTO);
+        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findAllPlanner(authentication.getName(), searchDTO);
 
-        return ResponseEntity.ok(plannerDTOList);
+        return ResponseEntity.ok(pageDTO);
     }
 
     @Operation(summary = "플래너 수정")
@@ -73,7 +71,7 @@ public class PlannerController {
 
         log.info(plannerDTO + " is new planner");
 
-        crudPlannerService.updatePlannerFull(email, plannerDTO);
+        plannerService.updatePlannerFull(email, plannerDTO);
 
         return ResponseEntity.ok(true);
     }
@@ -81,13 +79,12 @@ public class PlannerController {
     @Operation(summary = "플래너 삭제")
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deletePlanner(
-            Authentication authentication,
-            @RequestParam Long plannerId) {
+            Authentication authentication, @RequestParam Long plannerId) {
         String email = authentication.getName();
 
         log.info("email : " + email + ", planner id : " + plannerId);
 
-        crudPlannerService.deletePlanner(email, plannerId);
+        plannerService.deletePlanner(email, plannerId);
 
         return ResponseEntity.ok(true);
     }
