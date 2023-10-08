@@ -44,6 +44,8 @@ public class PlannerController {
     @GetMapping(value = "/view/my_planner")
     public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewMyPlanner(
             Authentication authentication, @RequestParam int page, @RequestParam int size) {
+        log.info("page: " + page + ", size: " + size);
+
         PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findMyPlannerByEmail(authentication.getName(), page, size);
 
         return ResponseEntity.ok(pageDTO);

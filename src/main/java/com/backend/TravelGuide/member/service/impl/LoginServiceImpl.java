@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60;
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24;
     private static final String TOKEN_PREFIX = "Bearer ";
 
     public Member saveKakaoMemberIfNotExists(MemberRequestDTO.KakaoLoginDTO loginDto) {
