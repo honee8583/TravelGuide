@@ -40,6 +40,14 @@ public class PlannerController {
         return ResponseEntity.ok(true);
     }
 
+    @Operation(summary = "플래너 조회")
+    @GetMapping("/get/{id}")
+    public ResponseEntity<PlannerResponseDTO.PlannerResponse> getPlanner(@PathVariable("id") Long id) {
+        PlannerResponseDTO.PlannerResponse plannerResponse = plannerService.getPlanner(id);
+
+        return ResponseEntity.ok(plannerResponse);
+    }
+
     @Operation(summary = "내 플래너 목록 조회")
     @GetMapping(value = "/view/my_planner")
     public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewMyPlanner(
