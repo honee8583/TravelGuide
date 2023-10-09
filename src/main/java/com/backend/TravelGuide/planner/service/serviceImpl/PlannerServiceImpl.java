@@ -54,6 +54,17 @@ public class PlannerServiceImpl implements PlannerService {
         });
     }
 
+    // 플래너 상세 조회
+    @Override
+    public PlannerResponseDTO.PlannerResponse getPlanner(long id) {
+        Planner planner = plannerRepository.findById(id)
+                .orElseThrow(PlannerNotExistsException::new);
+
+        List<Schedule> scheduleList = scheduleRepository.findByPlannerId(planner.getPlannerId());
+
+        return PlannerResponseDTO.PlannerResponse.entityToDTO(planner, scheduleList);
+    }
+
     // 내 플래너들 목록
     @Transactional
     @Override

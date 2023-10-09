@@ -6,6 +6,7 @@ import com.backend.TravelGuide.planner.DTO.PlannerResponseDTO;
 
 public interface PlannerService {
     void insertPlannerFull(PlannerDTO plannerDTO);
+    PlannerResponseDTO.PlannerResponse getPlanner(long id);
     PlannerResponseDTO.PlannerPageDTO findMyPlannerByEmail(String email, int page, int size);
     PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO);
     void deletePlanner(String email, Long plannerId);

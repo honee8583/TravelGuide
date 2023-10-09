@@ -11,24 +11,19 @@ import reactor.util.annotation.Nullable;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Planner")
+@Data
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Data
+@Entity
 public class Planner extends BaseEntity {
-
-    @Column(name = "planner_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long plannerId;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "title")
     private String title;
+    private String comment;
+    private String thumbnailUrl;
 
     @Column(name = "first_date")
     private LocalDate firstDate;
@@ -36,14 +31,8 @@ public class Planner extends BaseEntity {
     @Column(name = "last_date")
     private LocalDate lastDate;
 
-    @Column(name = "comment")
-    @Nullable
-    private String comment;
-
     @Version
     private Long version;
-
-    private String thumbnailUrl;
 
     public static Planner dtoToEntity(PlannerDTO plannerDTO) {
         return Planner.builder()
