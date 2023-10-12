@@ -5,10 +5,10 @@ import com.backend.TravelGuide.planner.DTO.PlannerRequestDTO;
 import com.backend.TravelGuide.planner.DTO.PlannerResponseDTO;
 
 public interface PlannerService {
-    void insertPlannerFull(PlannerDTO plannerDTO);
+    void createPlanner(PlannerDTO plannerDTO);
     PlannerResponseDTO.PlannerResponse getPlanner(long id);
-    PlannerResponseDTO.PlannerPageDTO findMyPlannerByEmail(String email, int page, int size);
+    PlannerResponseDTO.PlannerPageDTO findMyPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO);
     PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO);
     void deletePlanner(String email, Long plannerId);
-    void updatePlannerFull(String email, PlannerDTO plannerDTO);
+    void updatePlanner(String email, PlannerDTO plannerDTO);
 }

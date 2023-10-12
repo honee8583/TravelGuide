@@ -36,7 +36,7 @@ public class ScheduleDTO {
                 .contentId(schedule.getContentId())
                 .contentType(schedule.getContentType())
                 .address(schedule.getAddress())
-                .place(schedule.getAddress())
+                .place(schedule.getPlace())
                 .mapX(schedule.getMapX())
                 .mapY(schedule.getMapY())
                 .date(schedule.getDate())

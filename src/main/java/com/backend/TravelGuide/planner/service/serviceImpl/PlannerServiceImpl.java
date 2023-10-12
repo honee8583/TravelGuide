@@ -17,6 +17,7 @@ import com.backend.TravelGuide.planner.repository.PlannerRepository;
 import com.backend.TravelGuide.planner.repository.ScheduleRepository;
 import com.backend.TravelGuide.planner.service.PlannerService;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,7 +43,7 @@ public class PlannerServiceImpl implements PlannerService {
     // 플래너 생성
     @Override
     @Transactional
-    public void insertPlannerFull(PlannerDTO plannerDTO) {
+    public void createPlanner(PlannerDTO plannerDTO) {
         plannerDTO.setThumbnailUrl(plannerDTO.getSchedule().get(0).getThumbnailLocation());
         Planner planner = Planner.dtoToEntity(plannerDTO);
         Planner plannerResult = plannerRepository.save(planner);
@@ -65,31 +66,27 @@ public class PlannerServiceImpl implements PlannerService {
         return PlannerResponseDTO.PlannerResponse.entityToDTO(planner, scheduleList);
     }
 
-    // 내 플래너들 목록
+    // 내 플래너들 목록 검색 및 조회
     @Transactional
     @Override
-    public PlannerResponseDTO.PlannerPageDTO findMyPlannerByEmail(String email, int page, int size) {
+    public PlannerResponseDTO.PlannerPageDTO findMyPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
 
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Planner> plannerList = plannerRepository.findByEmail(email, pageable);
-
+        Page<Planner> plannerList = searchPlanner(searchDTO, email);
         return new PlannerResponseDTO.PlannerPageDTO(plannerList);
     }
 
-    // 전체 플래너 리스트
+    // 전체 플래너 리스트 검색 및 조회
     @Transactional
     @Override
     public PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
 
-        Page<Planner> plannerList = searchPlanner(searchDTO);
+        Page<Planner> plannerList = searchPlanner(searchDTO, null);
 
-        PlannerResponseDTO.PlannerPageDTO pageDTO = new PlannerResponseDTO.PlannerPageDTO(plannerList);
-
-        return pageDTO;
+        return new PlannerResponseDTO.PlannerPageDTO(plannerList);
     }
 
     // 플래너 삭제
@@ -113,7 +110,7 @@ public class PlannerServiceImpl implements PlannerService {
     // 플래너 수정
     @Override
     @Transactional
-    public void updatePlannerFull(String email, PlannerDTO plannerDTO) {
+    public void updatePlanner(String email, PlannerDTO plannerDTO) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("No Such User.."));
 
@@ -134,7 +131,7 @@ public class PlannerServiceImpl implements PlannerService {
     }
 
     // 플래너 검색
-    public Page<Planner> searchPlanner(PlannerRequestDTO.PlannerSearchDTO searchDTO) {
+    public Page<Planner> searchPlanner(PlannerRequestDTO.PlannerSearchDTO searchDTO, String email) {
         Pageable pageable = PageRequest.of(searchDTO.getPage() - 1, searchDTO.getSize());
 
         QPlanner qPlanner = QPlanner.planner;
@@ -150,6 +147,14 @@ public class PlannerServiceImpl implements PlannerService {
                 booleanBuilder.or(qPlanner.email.contains(searchDTO.getKeyword()));
             }
         }
+
+        BooleanExpression expression= null;
+
+        if (email != null && !email.trim().equals("")) {
+            expression = qPlanner.email.eq(email);
+        }
+
+        booleanBuilder.and(expression);
 
         return plannerRepository.findAll(booleanBuilder, pageable);
     }

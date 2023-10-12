@@ -31,11 +31,10 @@ public class PlannerController {
             @RequestBody PlannerRequestDTO.PlannerWriteRequestDTO plannerRequestDTO,
             Authentication authentication) {
         PlannerDTO plannerDTO = plannerMapper.requestToPlannerDTO(plannerRequestDTO);
-        String email = authentication.getName();
-        plannerDTO.setEmail(email);
-        log.info(plannerDTO.toString());
+        plannerDTO.setEmail(authentication.getName());
 
-        plannerService.insertPlannerFull(plannerDTO);
+        log.info(plannerDTO.toString());
+        plannerService.createPlanner(plannerDTO);
 
         return ResponseEntity.ok(true);
     }
@@ -43,6 +42,8 @@ public class PlannerController {
     @Operation(summary = "플래너 조회")
     @GetMapping("/get/{id}")
     public ResponseEntity<PlannerResponseDTO.PlannerResponse> getPlanner(@PathVariable("id") Long id) {
+        log.info("id: " + id);
+
         PlannerResponseDTO.PlannerResponse plannerResponse = plannerService.getPlanner(id);
 
         return ResponseEntity.ok(plannerResponse);
@@ -51,10 +52,10 @@ public class PlannerController {
     @Operation(summary = "내 플래너 목록 조회")
     @GetMapping(value = "/view/my_planner")
     public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewMyPlanner(
-            Authentication authentication, @RequestParam int page, @RequestParam int size) {
-        log.info("page: " + page + ", size: " + size);
+            Authentication authentication, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
+        log.info(searchDTO.toString());
 
-        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findMyPlannerByEmail(authentication.getName(), page, size);
+        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findMyPlanner(authentication.getName(), searchDTO);
 
         return ResponseEntity.ok(pageDTO);
     }
@@ -81,7 +82,7 @@ public class PlannerController {
 
         log.info(plannerDTO + " is new planner");
 
-        plannerService.updatePlannerFull(email, plannerDTO);
+        plannerService.updatePlanner(email, plannerDTO);
 
         return ResponseEntity.ok(true);
     }

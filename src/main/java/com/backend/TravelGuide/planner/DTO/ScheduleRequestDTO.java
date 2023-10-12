@@ -5,12 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -39,11 +36,7 @@ public class ScheduleRequestDTO {
     private LocalDate date;
 
     private LocalDateTime arriveTime;
-
     private LocalTime viaTime;
-
     private LocalDateTime startTime;
-
     private String thumbnailLocation;
-
 }
