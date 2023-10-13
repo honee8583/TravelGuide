@@ -1,8 +1,10 @@
 package com.backend.TravelGuide.planner.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Date;
@@ -18,10 +20,10 @@ public class PlannerRequestDTO {
         @NotBlank
         private String title;
 
-        @NotBlank
+        @NotNull
         private LocalDate firstDate;
 
-        @NotBlank
+        @NotNull
         private LocalDate lastDate;
 
         private String comment;

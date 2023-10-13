@@ -53,8 +53,19 @@ public class ReviewController {
         return ResponseEntity.ok(id);
     }
 
+    @Operation(summary = "내 리뷰 목록 조회")
+    @GetMapping("/mylist")
+    public ResponseEntity<ReviewResponseDTO.ReviewPageDTO> getMyReviewList(
+            ReviewRequestDTO.ReviewSearchDTO searchDTO, Principal principal) {
+        log.info(searchDTO.toString());
+
+        ReviewResponseDTO.ReviewPageDTO pageDTO = reviewService.getMyReviewList(searchDTO, principal.getName());
+
+        return ResponseEntity.ok(pageDTO);
+    }
+
     @Operation(summary = "리뷰 목록 조회")
-    @GetMapping("/getList")
+    @GetMapping("/list")
     public ResponseEntity<ReviewResponseDTO.ReviewPageDTO> getReviewList(ReviewRequestDTO.ReviewSearchDTO searchDTO) {
         log.info(searchDTO.toString());
         ReviewResponseDTO.ReviewPageDTO pageDTO = reviewService.getList(searchDTO);

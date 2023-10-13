@@ -25,7 +25,6 @@ public class Review extends BaseEntity {
     private String content;
     private int view;
     private String thumbnailUrl;
-    private boolean isVisible;
 
     public static Review dtoToEntity(ReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO, Planner planner) {
         return Review.builder()
@@ -33,7 +32,6 @@ public class Review extends BaseEntity {
                 .content(reviewRegisterDTO.getContent())
                 .email(reviewRegisterDTO.getEmail())
                 .planner(planner)
-                .isVisible(reviewRegisterDTO.getIsVisible())
                 .view(0)
                 .thumbnailUrl(reviewRegisterDTO.getThumbnailUrl())
                 .build();
@@ -43,6 +41,5 @@ public class Review extends BaseEntity {
         this.planner = planner;
         this.title = modifyDTO.getTitle();
         this.content = modifyDTO.getContent();
-        this.isVisible = modifyDTO.getIsVisible();
     }
 }

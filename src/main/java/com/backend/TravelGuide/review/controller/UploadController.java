@@ -10,10 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -105,10 +102,13 @@ public class UploadController {
 
     @Operation(summary = "이미지 삭제")
     @PostMapping("/remove")
-    public ResponseEntity<Boolean> removeFile(String fileName) {
+    public ResponseEntity<Boolean> removeFile(@RequestParam String fileName) {
+        log.info("remove fileName: " + fileName);
+
         String srcFileName = null;
         try {
             srcFileName = URLDecoder.decode(fileName, "UTF-8");
+            log.info("srcFileName: " + srcFileName);
             File file = new File(uploadPath + File.separator + srcFileName);
             boolean result = file.delete();
 

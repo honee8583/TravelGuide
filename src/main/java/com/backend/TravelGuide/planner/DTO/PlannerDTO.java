@@ -25,5 +25,4 @@ public class PlannerDTO {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private Long version;
 }

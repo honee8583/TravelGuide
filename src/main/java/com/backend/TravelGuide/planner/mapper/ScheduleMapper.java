@@ -19,11 +19,11 @@ public interface ScheduleMapper {
     )
     public ScheduleDTO entityToScheduleDTO(Schedule schedule);
 
-    @Mappings(
-            {
-                    @Mapping(source = "date", target = "date")
-            }
-    )
+//    @Mappings(
+//            {
+//                    @Mapping(source = "date", target = "date")
+//            }
+//    )
     public ScheduleDTO requestToScheduleDTO(ScheduleRequestDTO scheduleRequestDTO);
 
     public Schedule requestToEntity(ScheduleRequestDTO scheduleRequestDTO);

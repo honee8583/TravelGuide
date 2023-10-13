@@ -26,10 +26,12 @@ public class PlannerController {
     private final PlannerService plannerService;
 
     @Operation(summary = "플래너 작성")
-    @PostMapping(value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping("/add")
     public ResponseEntity<Boolean> addPlanner(
             @RequestBody PlannerRequestDTO.PlannerWriteRequestDTO plannerRequestDTO,
             Authentication authentication) {
+        log.info(plannerRequestDTO.toString());
+
         PlannerDTO plannerDTO = plannerMapper.requestToPlannerDTO(plannerRequestDTO);
         plannerDTO.setEmail(authentication.getName());
 

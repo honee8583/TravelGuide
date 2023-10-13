@@ -94,9 +94,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public ReviewResponseDTO.ReviewPageDTO getMyReviewList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO, String email) {
+        Page<Review> pages = searchReview(reviewSearchDTO, email);
+
+        return new ReviewResponseDTO.ReviewPageDTO(pages);
+    }
+
+    @Override
     @Transactional
     public ReviewResponseDTO.ReviewPageDTO getList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO) {
-        Page<Review> pages = searchReview(reviewSearchDTO);
+        Page<Review> pages = searchReview(reviewSearchDTO, null);
 
         return new ReviewResponseDTO.ReviewPageDTO(pages);
     }
@@ -114,7 +121,7 @@ public class ReviewServiceImpl implements ReviewService {
         return review.getId();
     }
 
-    public Page<Review> searchReview(ReviewRequestDTO.ReviewSearchDTO searchDTO) {
+    public Page<Review> searchReview(ReviewRequestDTO.ReviewSearchDTO searchDTO, String email) {
         Pageable pageable = PageRequest.of(searchDTO.getPage() - 1, searchDTO.getSize());
 
         QReview qReview = QReview.review;
@@ -131,8 +138,11 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
-        BooleanExpression expression = qReview.isVisible.eq(true);
-        booleanBuilder.and(expression);
+        BooleanExpression expression = null;
+        if (email != null && !email.trim().equals("")) {
+            expression = qReview.email.eq(email);
+            booleanBuilder.and(expression);
+        }
 
         return reviewRepository.findAll(booleanBuilder, pageable);
     }

@@ -13,6 +13,8 @@ public interface ReviewService {
     Long modify(ReviewRequestDTO.ReviewModifyDTO reviewModifyDTO);
     // 리뷰 조회
     ReviewDTO get(Long reviewId);
+    // 내 리뷰 리스트 조회 및 검색
+    ReviewResponseDTO.ReviewPageDTO getMyReviewList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO, String email);
     // 리뷰 리스트 조회 및 검색
     ReviewResponseDTO.ReviewPageDTO getList(ReviewRequestDTO.ReviewSearchDTO reviewSearchDTO);
     // 리뷰 삭제

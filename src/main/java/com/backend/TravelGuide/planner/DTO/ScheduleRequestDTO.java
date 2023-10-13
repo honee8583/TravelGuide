@@ -1,10 +1,12 @@
 package com.backend.TravelGuide.planner.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,11 +15,10 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleRequestDTO {
-
-    @NotBlank
+    @NotNull
     private Long contentId;
 
-    @NotBlank
+    @NotNull
     private Long contentType;
 
     @NotBlank
@@ -26,17 +27,9 @@ public class ScheduleRequestDTO {
     @NotBlank
     private String place;
 
-    @NotBlank
-    private Long mapX;
+//    private int date;
 
-    @NotBlank
-    private Long mapY;
-
-    @NotBlank
-    private LocalDate date;
-
-    private LocalDateTime arriveTime;
-    private LocalTime viaTime;
-    private LocalDateTime startTime;
+//    private LocalDateTime arriveTime;
+//    private LocalDateTime startTime;
     private String thumbnailLocation;
 }

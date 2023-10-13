@@ -19,7 +19,6 @@ public class ReviewDTO {
     private String title;
     private String content;
     private int view;
-    private boolean isVisible;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -37,7 +36,6 @@ public class ReviewDTO {
                 .title(review.getTitle())
                 .content(review.getContent())
                 .view(review.getView())
-                .isVisible(review.isVisible())
                 .createdAt(review.getCreatedAt())
                 .modifiedAt(review.getModifiedAt())
                 .build();
