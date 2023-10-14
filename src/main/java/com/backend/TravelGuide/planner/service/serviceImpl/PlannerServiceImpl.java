@@ -80,10 +80,7 @@ public class PlannerServiceImpl implements PlannerService {
     // 전체 플래너 리스트 검색 및 조회
     @Transactional
     @Override
-    public PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No Such User"));
-
+    public PlannerResponseDTO.PlannerPageDTO findAllPlanner(PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         Page<Planner> plannerList = searchPlanner(searchDTO, null);
 
         return new PlannerResponseDTO.PlannerPageDTO(plannerList);

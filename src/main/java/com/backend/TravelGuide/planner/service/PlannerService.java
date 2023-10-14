@@ -8,7 +8,7 @@ public interface PlannerService {
     void createPlanner(PlannerDTO plannerDTO);
     PlannerResponseDTO.PlannerResponse getPlanner(long id);
     PlannerResponseDTO.PlannerPageDTO findMyPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO);
-    PlannerResponseDTO.PlannerPageDTO findAllPlanner(String email, PlannerRequestDTO.PlannerSearchDTO searchDTO);
+    PlannerResponseDTO.PlannerPageDTO findAllPlanner(PlannerRequestDTO.PlannerSearchDTO searchDTO);
     void deletePlanner(String email, Long plannerId);
     void updatePlanner(String email, PlannerDTO plannerDTO);
 }

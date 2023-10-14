@@ -64,11 +64,10 @@ public class PlannerController {
 
     @Operation(summary = "모든 플래너 목록 조회")
     @GetMapping(value = "/view/all_planner")
-    public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewAllPlanner(
-            Authentication authentication, PlannerRequestDTO.PlannerSearchDTO searchDTO) {
+    public ResponseEntity<PlannerResponseDTO.PlannerPageDTO> viewAllPlanner(PlannerRequestDTO.PlannerSearchDTO searchDTO) {
         log.info(searchDTO.toString());
 
-        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findAllPlanner(authentication.getName(), searchDTO);
+        PlannerResponseDTO.PlannerPageDTO pageDTO = plannerService.findAllPlanner(searchDTO);
 
         return ResponseEntity.ok(pageDTO);
     }

@@ -72,7 +72,7 @@ public class JwtCheckFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String[] excludePath = {"/uploadEx", "/file", "/planner/all_planner", "/favicon.ico","/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger-ui", "/v3", "/api"};
+        String[] excludePath = {"/uploadEx", "/file", "/review/list", "/planner/view/all_planner", "/favicon.ico","/user", "/login", "/member/join", "/member/checkAnswer", "/member/newPassword", "/member/duplication", "/swagger-ui", "/v3", "/api"};
         String path = request.getRequestURI();
 
         log.info(path);
