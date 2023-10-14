@@ -18,8 +18,6 @@ public class ReviewRequestDTO {
         private String email;
         private String title;
         private String content;
-        private Boolean isVisible;
-        private String location;
         private String thumbnailUrl;
 
         @Builder.Default

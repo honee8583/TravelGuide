@@ -26,7 +26,10 @@ public class ReviewController {
     public ResponseEntity<Long> reviewRegister(Principal principal,
                        @RequestBody ReviewRequestDTO.ReviewRegisterDTO reviewRegisterDTO) {
         reviewRegisterDTO.setEmail(principal.getName());
-        reviewRegisterDTO.setThumbnailUrl(reviewRegisterDTO.getReviewImageDTOList().get(0).getThumbnailUrl());
+
+        if (reviewRegisterDTO.getReviewImageDTOList() != null && reviewRegisterDTO.getReviewImageDTOList().size() != 0) {
+            reviewRegisterDTO.setThumbnailUrl(reviewRegisterDTO.getReviewImageDTOList().get(0).getThumbnailUrl());
+        }
         log.info(reviewRegisterDTO.toString());
         Long id = reviewService.register(reviewRegisterDTO);    // 업로드한 이미지 정보 포함.
 
