@@ -1,15 +1,14 @@
 package com.backend.TravelGuide.planner.DTO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 @NoArgsConstructor
@@ -27,9 +26,11 @@ public class ScheduleRequestDTO {
     @NotBlank
     private String place;
 
-//    private int date;
+    private LocalDate date;
 
-//    private LocalDateTime arriveTime;
-//    private LocalDateTime startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime arriveTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startTime;
     private String thumbnailLocation;
 }

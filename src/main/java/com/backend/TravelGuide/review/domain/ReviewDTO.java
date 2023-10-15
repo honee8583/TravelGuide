@@ -15,7 +15,7 @@ import java.util.List;
 public class ReviewDTO {
     private Long id;
     private Long plannerId;
-    private String email;
+    private String email;   // TODO nickname
     private String title;
     private String content;
     private int view;

@@ -65,10 +65,12 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.modify(reviewModifyDTO, planner);
 
-        for (ReviewImageDTO imageDTO : reviewModifyDTO.getReviewImageDTOList()) {
-            ReviewImage image = reviewImageRepository.findById(imageDTO.getId())
-                    .orElseThrow(ReviewImageNotExistsException::new);
-            image.modify(imageDTO);
+        if (reviewModifyDTO.getReviewImageDTOList() != null && reviewModifyDTO.getReviewImageDTOList().size() != 0) {
+            for (ReviewImageDTO imageDTO : reviewModifyDTO.getReviewImageDTOList()) {
+                ReviewImage image = reviewImageRepository.findById(imageDTO.getId())
+                        .orElseThrow(ReviewImageNotExistsException::new);
+                image.modify(imageDTO);
+            }
         }
 
         return reviewRepository.save(review).getId();

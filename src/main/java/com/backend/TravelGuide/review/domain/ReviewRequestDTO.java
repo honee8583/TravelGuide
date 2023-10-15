@@ -35,8 +35,6 @@ public class ReviewRequestDTO {
         private Long plannerId;
         private String title;
         private String content;
-        private Boolean isVisible;
-        private String location;
 
         @Builder.Default
         private List<ReviewImageDTO> reviewImageDTOList = new ArrayList<>();

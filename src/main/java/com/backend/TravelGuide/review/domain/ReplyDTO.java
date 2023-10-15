@@ -13,13 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReplyDTO {
-    private String email;
+    private Long id;
+    private String email;   // TODO nickname
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public static ReplyDTO entityToDto(Reply reply) {
         return ReplyDTO.builder()
+                .id(reply.getId())
                 .content(reply.getContent())
                 .email(reply.getEmail())
                 .createdAt(reply.getCreatedAt())
