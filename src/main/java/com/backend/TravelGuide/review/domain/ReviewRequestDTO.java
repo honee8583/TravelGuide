@@ -38,6 +38,9 @@ public class ReviewRequestDTO {
 
         @Builder.Default
         private List<ReviewImageDTO> reviewImageDTOList = new ArrayList<>();
+
+        @Builder.Default
+        private List<ReviewImageDTO> removeImageDTOList = new ArrayList<>();
     }
 
     @Getter

@@ -65,11 +65,30 @@ public class ReviewServiceImpl implements ReviewService {
 
         review.modify(reviewModifyDTO, planner);
 
+        // 수정
         if (reviewModifyDTO.getReviewImageDTOList() != null && reviewModifyDTO.getReviewImageDTOList().size() != 0) {
             for (ReviewImageDTO imageDTO : reviewModifyDTO.getReviewImageDTOList()) {
+                // 수정
+                if (imageDTO.getId() != null) {
+                    ReviewImage image = reviewImageRepository.findById(imageDTO.getId())
+                            .orElseThrow(ReviewImageNotExistsException::new);
+                    image.modify(imageDTO);
+
+                    reviewImageRepository.save(image);
+                } else {
+                    // 생성
+                    ReviewImage image = ReviewImage.dtoToEntity(imageDTO, review);
+                    reviewImageRepository.save(image);
+                }
+            }
+        }
+
+        // 삭제
+        if (reviewModifyDTO.getRemoveImageDTOList() != null && reviewModifyDTO.getRemoveImageDTOList().size() != 0) {
+            for (ReviewImageDTO imageDTO : reviewModifyDTO.getRemoveImageDTOList()) {
                 ReviewImage image = reviewImageRepository.findById(imageDTO.getId())
                         .orElseThrow(ReviewImageNotExistsException::new);
-                image.modify(imageDTO);
+                reviewImageRepository.delete(image);
             }
         }
 
